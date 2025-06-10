@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/payments")
@@ -61,7 +62,7 @@ public class PaymentController {
     }
 
     @GetMapping("/book/{bookId}")
-    public List<Payment> getPaymentsByBookId(@PathVariable Long bookId) {
+    public Optional<Payment> getPaymentsByBookId(@PathVariable Long bookId) {
         return paymentService.getPaymentsByBookId(bookId);
     }
 }

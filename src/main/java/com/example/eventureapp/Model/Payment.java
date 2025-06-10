@@ -76,15 +76,4 @@ public class Payment {
     public void setBooking(Booking booking) {
         this.booking = booking;
     }
-
-    @Override
-    public String toString() {
-        return "Payment{" +
-                "paymentId=" + paymentId +
-                ", amount=" + amount +
-                ", paymentDate=" + paymentDate +
-                ", cardName='" + cardName + '\'' +
-                ", bookingId=" + (booking != null ? booking.getBookId() : null) +
-                '}';
-    }
 }
