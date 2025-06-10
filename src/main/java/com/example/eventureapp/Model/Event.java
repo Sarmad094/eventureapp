@@ -11,28 +11,24 @@ public class Event {
     @Column(name = "event_id")
     private Long eventId;
 
-    // Many-to-One relationship with Organization
     @ManyToOne
     @JoinColumn(name = "org_id", referencedColumnName = "org_id")
     private Organization organization;
 
-    // Many-to-One relationship with Field
     @ManyToOne
     @JoinColumn(name = "field_id", referencedColumnName = "field_id")
     private Field fieldEntity;
 
-    // Many-to-One relationship with Location
     @ManyToOne
     @JoinColumn(name = "location_id", referencedColumnName = "location_id")
     private Location location;
 
-    // One-to-Many relationship with Booking
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Booking> bookings;
 
-    // One-to-One relationship with LikedEvent
-    @OneToOne(mappedBy = "event", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private LikedEvent likedEvent;
+    // Endret fra OneToOne til OneToMany
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<LikedEvent> likedEvents;
 
     @Column(name = "title")
     private String title;
@@ -53,8 +49,7 @@ public class Event {
     private Double price;
 
     // Constructors
-    public Event() {
-    }
+    public Event() {}
 
     public Event(String title, LocalDateTime startDate, LocalDateTime endDate) {
         this.title = title;
@@ -62,12 +57,12 @@ public class Event {
         this.endDate = endDate;
     }
 
-    // Getters and Setters
+    // Getters og Setters
     public Long getEventId() {
         return eventId;
     }
 
-    public void setEventId(Long eventId) {
+    public void setEventId(long eventId) {
         this.eventId = eventId;
     }
 
@@ -103,12 +98,12 @@ public class Event {
         this.bookings = bookings;
     }
 
-    public LikedEvent getLikedEvent() {
-        return likedEvent;
+    public List<LikedEvent> getLikedEvents() {
+        return likedEvents;
     }
 
-    public void setLikedEvent(LikedEvent likedEvent) {
-        this.likedEvent = likedEvent;
+    public void setLikedEvents(List<LikedEvent> likedEvents) {
+        this.likedEvents = likedEvents;
     }
 
     public String getTitle() {

@@ -5,7 +5,6 @@ import com.example.eventureapp.Repository.LikedEventRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class LikedEventService {
@@ -18,6 +17,10 @@ public class LikedEventService {
 
     public List<LikedEvent> getLikedEventsByStudentId(Long studentId) {
         return likedEventRepository.findByIdStudentId(studentId);
+    }
+
+    public List<LikedEvent> getAllLikedEvents() {
+        return likedEventRepository.findAll();
     }
 
     public boolean isEventLiked(Long studentId, Long eventId) {
@@ -34,4 +37,3 @@ public class LikedEventService {
         likedEventRepository.deleteByIdStudentIdAndIdEventId(studentId, eventId);
     }
 }
-

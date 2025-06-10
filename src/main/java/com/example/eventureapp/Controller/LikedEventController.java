@@ -8,14 +8,19 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/liked-events")
-@CrossOrigin(origins = "*") // Tillater frontend-tilgang fra alle domener, juster hvis nødvendig
+@RequestMapping("/api/likedevents")
 public class LikedEventController {
 
     private final LikedEventService likedEventService;
 
     public LikedEventController(LikedEventService likedEventService) {
         this.likedEventService = likedEventService;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<LikedEvent>> getAllLikedEvents() {
+        List<LikedEvent> likedEvents = likedEventService.getAllLikedEvents();
+        return ResponseEntity.ok(likedEvents);
     }
 
     @GetMapping("/{studentId}")
