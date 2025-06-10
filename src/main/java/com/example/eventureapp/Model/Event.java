@@ -1,6 +1,5 @@
 package com.example.eventureapp.Model;
 
-import com.example.eventureapp.Model.Field;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -12,10 +11,17 @@ import lombok.Setter;
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(name = "event_id")
     private Long eventId;
+
+    @Column(name = "location_id")
+    private Long locationId;
+
+    @Column(name = "org_id")
+    private Long orgId;
+
+    @Column(name = "field_id")
+    private Long fieldId;
 
     @Column(name = "title")
     private String title;
@@ -26,8 +32,8 @@ public class Event {
     @Column(name = "location")
     private String location;
 
-    @Column(name = "description")
-    private String description;
+    @Column(name = "e_description")
+    private String e_description;
 
     @Column(name = "participants")
     private Integer participants;
@@ -48,7 +54,6 @@ public class Event {
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
-
     }
 
     @Override
@@ -59,6 +64,9 @@ public class Event {
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 ", location='" + location + '\'' +
+                ", locationId=" + locationId +
+                ", orgId=" + orgId +
+                ", fieldId=" + fieldId +
                 '}';
     }
 }
