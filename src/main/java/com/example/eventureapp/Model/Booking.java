@@ -11,50 +11,46 @@ public class Booking {
     @Column(name = "bookid")
     private int bookId;
 
-    @Column(name = "eventid")
-    private int eventId;
-
-    @Column(name = "studentid")
-    private int studentId;
-
     @Column(name = "bookdate")
     private String bookDate;
 
     @Column(name = "paymentstatus")
     private boolean paymentStatus;
 
+    // Many-to-One relationship with Event
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "eventid", referencedColumnName = "eventid")
+    private Event event;
+
+    // Many-to-One relationship with Student
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "studentid", referencedColumnName = "studentid")
+    private Student student;
+
+    // One-to-One relationship with Confirmation
+    @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Confirmation confirmation;
+
+    // One-to-One relationship with Payment
+    @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Payment payment;
+
     public Booking() {}
 
-    public Booking(int bookId, int eventId, int studentId, String bookDate, boolean paymentStatus) {
-        this.bookId = bookId;
-        this.eventId = eventId;
-        this.studentId = studentId;
+    public Booking(String bookDate, boolean paymentStatus, Event event, Student student) {
         this.bookDate = bookDate;
         this.paymentStatus = paymentStatus;
+        this.event = event;
+        this.student = student;
     }
 
+    // Getters and Setters
     public int getBookId() {
         return bookId;
     }
 
     public void setBookId(int bookId) {
         this.bookId = bookId;
-    }
-
-    public int getEventId() {
-        return eventId;
-    }
-
-    public void setEventId(int eventId) {
-        this.eventId = eventId;
-    }
-
-    public int getStudentId() {
-        return studentId;
-    }
-
-    public void setStudentId(int studentId) {
-        this.studentId = studentId;
     }
 
     public String getBookDate() {
@@ -73,14 +69,47 @@ public class Booking {
         this.paymentStatus = paymentStatus;
     }
 
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    public Confirmation getConfirmation() {
+        return confirmation;
+    }
+
+    public void setConfirmation(Confirmation confirmation) {
+        this.confirmation = confirmation;
+    }
+
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
+    }
+
     @Override
     public String toString() {
         return "Booking{" +
                 "bookId=" + bookId +
-                ", eventId=" + eventId +
-                ", studentId=" + studentId +
                 ", bookDate='" + bookDate + '\'' +
                 ", paymentStatus=" + paymentStatus +
+                ", eventId=" + (event != null ? event.getEventId() : null) +
+                ", studentId=" + (student != null ? student.getStudentId() : null) +
                 '}';
     }
 }
+

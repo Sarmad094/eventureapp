@@ -12,8 +12,10 @@ public class Confirmation {
     @Column(name = "confirmationid")
     private int confirmationId;
 
-    @Column(name = "bookingid")
-    private int bookingId;
+    // One-to-One relationship with Booking entity
+    @OneToOne
+    @JoinColumn(name = "bookid", referencedColumnName = "bookid")
+    private Booking booking;
 
     @Column(name = "confirmationdate")
     private Date confirmationDate;
@@ -23,9 +25,9 @@ public class Confirmation {
 
     public Confirmation() {}
 
-    public Confirmation(int confirmationId, int bookingId, Date confirmationDate, boolean emailSent) {
+    public Confirmation(int confirmationId, Booking booking, Date confirmationDate, boolean emailSent) {
         this.confirmationId = confirmationId;
-        this.bookingId = bookingId;
+        this.booking = booking;
         this.confirmationDate = confirmationDate;
         this.emailSent = emailSent;
     }
@@ -38,12 +40,12 @@ public class Confirmation {
         this.confirmationId = confirmationId;
     }
 
-    public int getBookingId() {
-        return bookingId;
+    public Booking getBooking() {
+        return booking;
     }
 
-    public void setBookingId(int bookingId) {
-        this.bookingId = bookingId;
+    public void setBooking(Booking booking) {
+        this.booking = booking;
     }
 
     public Date getConfirmationDate() {
@@ -66,7 +68,7 @@ public class Confirmation {
     public String toString() {
         return "Confirmation{" +
                 "confirmationId=" + confirmationId +
-                ", bookingId=" + bookingId +
+                ", booking=" + (booking != null ? booking.getBookId() : "null") +
                 ", confirmationDate=" + confirmationDate +
                 ", emailSent=" + emailSent +
                 '}';
