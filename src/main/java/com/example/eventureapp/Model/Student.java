@@ -21,7 +21,7 @@ public class Student {
 
     private String university;
 
-    private String field;
+    private String s_field;
 
     @Column(nullable = false)
     private String password;
@@ -76,11 +76,11 @@ public class Student {
     }
 
     public String getField() {
-        return field;
+        return s_field;
     }
 
     public void setField(String field) {
-        this.field = field;
+        this.s_field = field;
     }
 
     public String getPassword() {

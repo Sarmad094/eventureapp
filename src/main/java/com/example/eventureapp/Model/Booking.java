@@ -19,7 +19,7 @@ public class Booking {
 
     // Many-to-One relationship with Event
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "eventid", referencedColumnName = "eventid")
+    @JoinColumn(name = "event_id", referencedColumnName = "event_id")
     private Event event;
 
     // Many-to-One relationship with Student

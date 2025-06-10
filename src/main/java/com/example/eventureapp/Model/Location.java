@@ -9,7 +9,7 @@ public class Location {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "locationid")
+    @Column(name = "location_id")
     private int locationId;
 
     @Column(name = "locationname")

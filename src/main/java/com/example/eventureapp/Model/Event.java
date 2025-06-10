@@ -4,11 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import lombok.Getter;
-import lombok.Setter;
-
 @Entity
-@Getter @Setter
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +30,7 @@ public class Event {
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Booking> bookings;
 
-    // One-to-Many relationship with LikedEvent
+    // One-to-One relationship with LikedEvent
     @OneToOne(mappedBy = "event", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private LikedEvent likedEvent;
 
@@ -56,6 +52,7 @@ public class Event {
     @Column(name = "price")
     private Double price;
 
+    // Constructors
     public Event() {
     }
 
@@ -63,6 +60,103 @@ public class Event {
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    // Getters and Setters
+    public Long getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(Long eventId) {
+        this.eventId = eventId;
+    }
+
+    public Organization getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
+    }
+
+    public Field getFieldEntity() {
+        return fieldEntity;
+    }
+
+    public void setFieldEntity(Field fieldEntity) {
+        this.fieldEntity = fieldEntity;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public List<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(List<Booking> bookings) {
+        this.bookings = bookings;
+    }
+
+    public LikedEvent getLikedEvent() {
+        return likedEvent;
+    }
+
+    public void setLikedEvent(LikedEvent likedEvent) {
+        this.likedEvent = likedEvent;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getE_description() {
+        return e_description;
+    }
+
+    public void setE_description(String e_description) {
+        this.e_description = e_description;
+    }
+
+    public Integer getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(Integer participants) {
+        this.participants = participants;
+    }
+
+    public LocalDateTime getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDateTime startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDateTime getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
     @Override
@@ -73,7 +167,7 @@ public class Event {
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 ", organization=" + (organization != null ? organization.getOrgId() : "null") +
-                ", field=" + (fieldEntity != null ? fieldEntity.getField() : "null") +
+                ", field=" + (fieldEntity != null ? fieldEntity.getFieldId() : "null") +
                 ", location=" + (location != null ? location.getLocationName() : "null") +
                 '}';
     }

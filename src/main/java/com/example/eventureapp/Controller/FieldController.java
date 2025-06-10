@@ -38,7 +38,7 @@ public class FieldController {
     public ResponseEntity<Field> update(@PathVariable Long id, @RequestBody Field updated) {
         return service.findById(id)
                 .map(existing -> {
-                    existing.setField(updated.getField());
+                    existing.setFieldName(updated.getFieldName());
                     existing.setFDescription(updated.getFDescription());
                     return ResponseEntity.ok(service.save(existing));
                 })

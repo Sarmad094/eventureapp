@@ -1,13 +1,9 @@
 package com.example.eventureapp.Model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
 public class Field {
 
     @Id
@@ -22,15 +18,49 @@ public class Field {
     private String fDescription;
 
     // One-to-Many relationship with Event
-    @OneToMany(mappedBy = "field", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "fieldEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Event> events;
 
+    // Constructors
     public Field() {
     }
 
     public Field(String fieldName, String fDescription) {
         this.fieldName = fieldName;
         this.fDescription = fDescription;
+    }
+
+    // Getters and Setters
+    public Long getFieldId() {
+        return fieldId;
+    }
+
+    public void setFieldId(Long fieldId) {
+        this.fieldId = fieldId;
+    }
+
+    public String getFieldName() {
+        return fieldName;
+    }
+
+    public void setFieldName(String fieldName) {
+        this.fieldName = fieldName;
+    }
+
+    public String getFDescription() {
+        return fDescription;
+    }
+
+    public void setFDescription(String fDescription) {
+        this.fDescription = fDescription;
+    }
+
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<Event> events) {
+        this.events = events;
     }
 
     @Override

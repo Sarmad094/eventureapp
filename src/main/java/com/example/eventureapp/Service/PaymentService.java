@@ -58,7 +58,8 @@ public class PaymentService {
         }
     }
 
-    public Optional<Payment> getPaymentsByBookId(Long bookId) {
-        return paymentRepository.findByBooking(bookId);
+    // ENDRET: Long -> int og findByBooking -> findByBookingBookId
+    public Optional<Payment> getPaymentsByBookId(int bookId) {
+        return paymentRepository.findByBookingBookId(bookId);
     }
 }

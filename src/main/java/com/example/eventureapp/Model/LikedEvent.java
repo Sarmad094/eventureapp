@@ -20,7 +20,7 @@ public class LikedEvent {
     // One-to-One relationship with Event
     @OneToOne
     @MapsId("eventId")
-    @JoinColumn(name = "eventid")
+    @JoinColumn(name = "event_id")
     private Event event;
 
     public LikedEvent() {}

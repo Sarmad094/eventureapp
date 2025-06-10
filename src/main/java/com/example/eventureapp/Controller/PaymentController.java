@@ -62,7 +62,7 @@ public class PaymentController {
     }
 
     @GetMapping("/book/{bookId}")
-    public Optional<Payment> getPaymentsByBookId(@PathVariable Long bookId) {
+    public Optional<Payment> getPaymentsByBookId(@PathVariable int bookId) {
         return paymentService.getPaymentsByBookId(bookId);
     }
 }
