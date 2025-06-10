@@ -2,6 +2,7 @@ package com.example.eventureapp.Model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -14,23 +15,31 @@ public class Event {
     @Column(name = "event_id")
     private Long eventId;
 
-    @Column(name = "location_id")
-    private Long locationId;
+    // Many-to-One relationship with Organization
+    @ManyToOne
+    @JoinColumn(name = "org_id", referencedColumnName = "org_id")
+    private Organization organization;
 
-    @Column(name = "org_id")
-    private Long orgId;
+    // Many-to-One relationship with Field
+    @ManyToOne
+    @JoinColumn(name = "field_id", referencedColumnName = "field_id")
+    private Field fieldEntity;
 
-    @Column(name = "field_id")
-    private Long fieldId;
+    // Many-to-One relationship with Location
+    @ManyToOne
+    @JoinColumn(name = "location_id", referencedColumnName = "location_id")
+    private Location location;
+
+    // One-to-Many relationship with Booking
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Booking> bookings;
+
+    // One-to-Many relationship with LikedEvent
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<LikedEvent> likedEvents;
 
     @Column(name = "title")
     private String title;
-
-    @Column(name = "field")
-    private String field;
-
-    @Column(name = "location")
-    private String location;
 
     @Column(name = "e_description")
     private String e_description;
@@ -63,10 +72,9 @@ public class Event {
                 ", title='" + title + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
-                ", location='" + location + '\'' +
-                ", locationId=" + locationId +
-                ", orgId=" + orgId +
-                ", fieldId=" + fieldId +
+                ", organization=" + (organization != null ? organization.getOrgId() : "null") +
+                ", field=" + (fieldEntity != null ? fieldEntity.getField() : "null") +
+                ", location=" + (location != null ? location.getLocationName() : "null") +
                 '}';
     }
 }
