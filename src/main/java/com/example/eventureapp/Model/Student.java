@@ -1,7 +1,6 @@
 package com.example.eventureapp.Model;
-
 import jakarta.persistence.*;
-// import java.util.List;
+import java.util.List;
 
 @Entity
 @Table(name = "student")
@@ -26,6 +25,14 @@ public class Student {
 
     @Column(nullable = false)
     private String password;
+
+    // One-to-Many relationship with Booking
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Booking> bookings;
+
+    // One-to-Many relationship with LikedEvent
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<LikedEvent> likedEvents;
 
     // Getters and setters
     public Long getStudentId() {
@@ -83,5 +90,20 @@ public class Student {
     public void setPassword(String password) {
         this.password = password;
     }
-}
 
+    public List<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(List<Booking> bookings) {
+        this.bookings = bookings;
+    }
+
+    public List<LikedEvent> getLikedEvents() {
+        return likedEvents;
+    }
+
+    public void setLikedEvents(List<LikedEvent> likedEvents) {
+        this.likedEvents = likedEvents;
+    }
+}

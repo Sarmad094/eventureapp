@@ -11,6 +11,18 @@ public class LikedEvent {
     @EmbeddedId
     private LikedEventKey id;
 
+    // Many-to-One relationship with Student
+    @ManyToOne
+    @MapsId("studentId")
+    @JoinColumn(name = "studentid")
+    private Student student;
+
+    // One-to-One relationship with Event
+    @OneToOne
+    @MapsId("eventId")
+    @JoinColumn(name = "eventid")
+    private Event event;
+
     public LikedEvent() {}
 
     public LikedEvent(Long studentId, Long eventId) {
@@ -31,6 +43,22 @@ public class LikedEvent {
 
     public Long getEventId() {
         return id.getEventId();
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
     }
 
     @Embeddable
