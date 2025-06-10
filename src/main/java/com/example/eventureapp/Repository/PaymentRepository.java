@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
-    List<Payment> findByBookId(Long bookId);
+    List<Payment> findByBooking(Long bookId);
 
     boolean existsByBookId(Long bookId);
 }

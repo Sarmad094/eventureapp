@@ -37,6 +37,7 @@ public class OrganizationService {
         Optional<Organization> existingOrg = organizationRepository.findById(orgId);
         if (existingOrg.isPresent()) {
             Organization org = existingOrg.get();
+            org.setOrgName(organization.getOrgName());
             org.setEmail(organization.getEmail());
             org.setPassword(organization.getPassword());
             org.setOField(organization.getOField());

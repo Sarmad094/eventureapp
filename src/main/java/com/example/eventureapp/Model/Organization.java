@@ -1,6 +1,7 @@
 package com.example.eventureapp.Model;
 
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "organization")
@@ -11,6 +12,9 @@ public class Organization {
     @Column(name = "orgid")
     private Long orgId;
 
+    @Column(nullable = false)
+    private String orgName;
+
     @Column(nullable = false, unique = true)
     private String email;
 
@@ -20,10 +24,15 @@ public class Organization {
     @Column(name = "o_field")
     private String oField;
 
+    // One-to-Many relasjon til Event
+    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Event> events;
+
     // Constructors
     public Organization() {}
 
-    public Organization(String email, String password, String oField) {
+    public Organization(String orgName, String email, String password, String oField) {
+        this.orgName = orgName;
         this.email = email;
         this.password = password;
         this.oField = oField;
@@ -36,6 +45,14 @@ public class Organization {
 
     public void setOrgId(Long orgId) {
         this.orgId = orgId;
+    }
+
+    public String getOrgName() {
+        return orgName;
+    }
+
+    public void setOrgName(String orgName) {
+        this.orgName = orgName;
     }
 
     public String getEmail() {
@@ -60,5 +77,13 @@ public class Organization {
 
     public void setOField(String oField) {
         this.oField = oField;
+    }
+
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<Event> events) {
+        this.events = events;
     }
 }

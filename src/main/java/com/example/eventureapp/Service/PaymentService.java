@@ -30,7 +30,7 @@ public class PaymentService {
         if (payment.getAmount() == null || payment.getAmount() <= 0) {
             throw new IllegalArgumentException("Payment amount must be greater than 0");
         }
-        if (payment.getBookId() == null) {
+        if (payment.getBooking() == null) {
             throw new IllegalArgumentException("BookID is required");
         }
         return paymentRepository.save(payment);
@@ -40,7 +40,7 @@ public class PaymentService {
         Optional<Payment> existingPayment = paymentRepository.findById(paymentId);
         if (existingPayment.isPresent()) {
             Payment p = existingPayment.get();
-            p.setBookId(payment.getBookId());
+            p.setBooking(payment.getBooking());
             p.setAmount(payment.getAmount());
             p.setPaymentDate(payment.getPaymentDate());
             p.setCardName(payment.getCardName());
@@ -59,6 +59,6 @@ public class PaymentService {
     }
 
     public List<Payment> getPaymentsByBookId(Long bookId) {
-        return paymentRepository.findByBookId(bookId);
+        return paymentRepository.findByBooking(bookId);
     }
 }

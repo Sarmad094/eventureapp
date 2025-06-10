@@ -12,9 +12,6 @@ public class Payment {
     @Column(name = "paymentid")
     private Long paymentId;
 
-    @Column(name = "bookid", nullable = false)
-    private Long bookId;
-
     @Column(nullable = false)
     private Double amount;
 
@@ -24,14 +21,19 @@ public class Payment {
     @Column(name = "cardname")
     private String cardName;
 
+    // Many-to-One relasjon til Booking
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bookid", nullable = false)
+    private Booking booking;
+
     // Constructors
     public Payment() {}
 
-    public Payment(Long bookId, Double amount, LocalDate paymentDate, String cardName) {
-        this.bookId = bookId;
+    public Payment(Double amount, LocalDate paymentDate, String cardName, Booking booking) {
         this.amount = amount;
         this.paymentDate = paymentDate;
         this.cardName = cardName;
+        this.booking = booking;
     }
 
     // Getters and Setters
@@ -41,14 +43,6 @@ public class Payment {
 
     public void setPaymentId(Long paymentId) {
         this.paymentId = paymentId;
-    }
-
-    public Long getBookId() {
-        return bookId;
-    }
-
-    public void setBookId(Long bookId) {
-        this.bookId = bookId;
     }
 
     public Double getAmount() {
@@ -73,5 +67,13 @@ public class Payment {
 
     public void setCardName(String cardName) {
         this.cardName = cardName;
+    }
+
+    public Booking getBooking() {
+        return booking;
+    }
+
+    public void setBooking(Booking booking) {
+        this.booking = booking;
     }
 }
