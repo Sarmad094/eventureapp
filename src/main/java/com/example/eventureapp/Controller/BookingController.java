@@ -10,7 +10,7 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping("/api/bookinger")
+@RequestMapping("/api/bookings")
 public class BookingController {
 
     private final BookingService bookingService;
