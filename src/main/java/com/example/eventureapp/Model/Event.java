@@ -35,8 +35,8 @@ public class Event {
     private List<Booking> bookings;
 
     // One-to-Many relationship with LikedEvent
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<LikedEvent> likedEvents;
+    @OneToOne(mappedBy = "event", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private LikedEvent likedEvent;
 
     @Column(name = "title")
     private String title;
