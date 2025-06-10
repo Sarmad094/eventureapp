@@ -1,7 +1,7 @@
-// Implementert og testet i stil med Sahil
 package com.example.eventureapp.Model;
 
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "location")
@@ -14,6 +14,10 @@ public class Location {
 
     @Column(name = "locationname")
     private String locationName;
+
+    // One-to-Many relationship with Event entity
+    @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Event> events;
 
     public Location() {}
 
@@ -36,6 +40,14 @@ public class Location {
 
     public void setLocationName(String locationName) {
         this.locationName = locationName;
+    }
+
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<Event> events) {
+        this.events = events;
     }
 
     @Override
