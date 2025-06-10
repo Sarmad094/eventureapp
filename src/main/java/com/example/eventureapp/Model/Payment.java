@@ -21,9 +21,9 @@ public class Payment {
     @Column(name = "cardname")
     private String cardName;
 
-    // Many-to-One relasjon til Booking
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bookid", nullable = false)
+    // One-to-One relationship with Booking
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bookid", referencedColumnName = "bookid")
     private Booking booking;
 
     // Constructors
@@ -75,5 +75,16 @@ public class Payment {
 
     public void setBooking(Booking booking) {
         this.booking = booking;
+    }
+
+    @Override
+    public String toString() {
+        return "Payment{" +
+                "paymentId=" + paymentId +
+                ", amount=" + amount +
+                ", paymentDate=" + paymentDate +
+                ", cardName='" + cardName + '\'' +
+                ", bookingId=" + (booking != null ? booking.getBookId() : null) +
+                '}';
     }
 }

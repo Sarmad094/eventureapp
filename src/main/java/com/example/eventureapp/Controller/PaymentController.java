@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/payments")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*") // Juster hvis du har frontend på en bestemt URL
 public class PaymentController {
 
     private final PaymentService paymentService;

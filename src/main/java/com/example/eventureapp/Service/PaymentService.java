@@ -58,7 +58,7 @@ public class PaymentService {
         }
     }
 
-    public List<Payment> getPaymentsByBookId(Long bookId) {
+    public Optional<Payment> getPaymentsByBookId(Long bookId) {
         return paymentRepository.findByBooking(bookId);
     }
 }
