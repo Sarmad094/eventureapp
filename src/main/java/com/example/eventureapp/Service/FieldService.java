@@ -1,5 +1,7 @@
 package com.example.eventureapp.Service;
 
+import com.example.eventureapp.DTO.FieldDTO;
+import com.example.eventureapp.Mapper.FieldMapper;
 import com.example.eventureapp.Model.Field;
 import com.example.eventureapp.Repository.FieldRepository;
 import org.springframework.stereotype.Service;
@@ -11,24 +13,46 @@ import java.util.Optional;
 public class FieldService {
 
     private final FieldRepository repository;
+    private final FieldMapper mapper;
 
-    public FieldService(FieldRepository repository) {
+    public FieldService(FieldRepository repository, FieldMapper mapper) {
         this.repository = repository;
+        this.mapper = mapper;
     }
 
-    public List<Field> findAll() {
-        return repository.findAll();
+    public List<FieldDTO> findAll() {
+        List<Field> fields = repository.findAll();
+        return mapper.toDTOList(fields);
     }
 
-    public Optional<Field> findById(Long id) {
-        return repository.findById(id);
+    public FieldDTO findById(Long id) {
+        Optional<Field> field = repository.findById(id);
+        return field.map(mapper::toDTO).orElse(null);
     }
 
-    public Field save(Field field) {
-        return repository.save(field);
+    public FieldDTO save(FieldDTO fieldDTO) {
+        Field field = mapper.toEntity(fieldDTO);
+        Field savedField = repository.save(field);
+        return mapper.toDTO(savedField);
     }
 
-    public void deleteById(Long id) {
-        repository.deleteById(id);
+    public FieldDTO update(Long id, FieldDTO fieldDTO) {
+        Optional<Field> existingField = repository.findById(id);
+        if (existingField.isPresent()) {
+            Field field = existingField.get();
+            field.setFieldName(fieldDTO.getFieldName());
+            field.setFDescription(fieldDTO.getDescription());
+            Field updatedField = repository.save(field);
+            return mapper.toDTO(updatedField);
+        }
+        return null;
+    }
+
+    public boolean deleteById(Long id) {
+        if (repository.existsById(id)) {
+            repository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }
