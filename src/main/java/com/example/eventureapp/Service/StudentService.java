@@ -1,5 +1,8 @@
+// StudentService.java
 package com.example.eventureapp.Service;
 
+import com.example.eventureapp.DTO.StudentDTO;
+import com.example.eventureapp.Mapper.StudentMapper;
 import com.example.eventureapp.Model.Student;
 import com.example.eventureapp.Repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
@@ -18,34 +22,37 @@ public class StudentService {
         this.studentRepository = studentRepository;
     }
 
-    public List<Student> getAllStudents() {
-        return studentRepository.findAll();
+    public List<StudentDTO> getAllStudents() {
+        return studentRepository.findAll().stream()
+                .map(StudentMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public Optional<Student> getStudentById(Long id) {
-        return studentRepository.findById(id);
+    public Optional<StudentDTO> getStudentById(Long id) {
+        return studentRepository.findById(id).map(StudentMapper::toDTO);
     }
 
     public Optional<Student> getStudentByEmail(String email) {
         return studentRepository.findByEmail(email);
     }
 
-    public Student createStudent(Student student) {
-        if (studentRepository.existsByEmail(student.getEmail())) {
+    public StudentDTO createStudent(StudentDTO dto) {
+        if (studentRepository.existsByEmail(dto.getEmail())) {
             throw new IllegalArgumentException("Student with this email already exists");
         }
-        return studentRepository.save(student);
+        Student saved = studentRepository.save(StudentMapper.toEntity(dto));
+        return StudentMapper.toDTO(saved);
     }
 
-    public Student updateStudent(Long id, Student updatedStudent) {
+    public StudentDTO updateStudent(Long id, StudentDTO dto) {
         return studentRepository.findById(id).map(existing -> {
-            existing.setName(updatedStudent.getName());
-            existing.setEmail(updatedStudent.getEmail());
-            existing.setPhonenumber(updatedStudent.getPhonenumber());
-            existing.setUniversity(updatedStudent.getUniversity());
-            existing.setField(updatedStudent.getField());
-            existing.setPassword(updatedStudent.getPassword());
-            return studentRepository.save(existing);
+            existing.setName(dto.getName());
+            existing.setEmail(dto.getEmail());
+            existing.setPhonenumber(dto.getPhonenumber());
+            existing.setUniversity(dto.getUniversity());
+            existing.setField(dto.getS_field());
+            existing.setPassword(dto.getPassword());
+            return StudentMapper.toDTO(studentRepository.save(existing));
         }).orElseThrow(() -> new IllegalArgumentException("Student not found"));
     }
 

@@ -1,10 +1,14 @@
+// LikedEventService.java
 package com.example.eventureapp.Service;
 
+import com.example.eventureapp.DTO.LikedEventDTO;
+import com.example.eventureapp.Mapper.LikedEventMapper;
 import com.example.eventureapp.Model.LikedEvent;
 import com.example.eventureapp.Repository.LikedEventRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class LikedEventService {
@@ -15,12 +19,18 @@ public class LikedEventService {
         this.likedEventRepository = likedEventRepository;
     }
 
-    public List<LikedEvent> getLikedEventsByStudentId(Long studentId) {
-        return likedEventRepository.findByIdStudentId(studentId);
+    public List<LikedEventDTO> getLikedEventsByStudentId(Long studentId) {
+        return likedEventRepository.findByIdStudentId(studentId)
+                .stream()
+                .map(LikedEventMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public List<LikedEvent> getAllLikedEvents() {
-        return likedEventRepository.findAll();
+    public List<LikedEventDTO> getAllLikedEvents() {
+        return likedEventRepository.findAll()
+                .stream()
+                .map(LikedEventMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     public boolean isEventLiked(Long studentId, Long eventId) {

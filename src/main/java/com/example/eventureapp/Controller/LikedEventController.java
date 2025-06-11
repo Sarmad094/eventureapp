@@ -1,6 +1,7 @@
+// LikedEventController.java
 package com.example.eventureapp.Controller;
 
-import com.example.eventureapp.Model.LikedEvent;
+import com.example.eventureapp.DTO.LikedEventDTO;
 import com.example.eventureapp.Service.LikedEventService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/likedevents")
+@CrossOrigin(origins = "*")
 public class LikedEventController {
 
     private final LikedEventService likedEventService;
@@ -18,13 +20,12 @@ public class LikedEventController {
     }
 
     @GetMapping
-    public ResponseEntity<List<LikedEvent>> getAllLikedEvents() {
-        List<LikedEvent> likedEvents = likedEventService.getAllLikedEvents();
-        return ResponseEntity.ok(likedEvents);
+    public ResponseEntity<List<LikedEventDTO>> getAllLikedEvents() {
+        return ResponseEntity.ok(likedEventService.getAllLikedEvents());
     }
 
     @GetMapping("/{studentId}")
-    public ResponseEntity<List<LikedEvent>> getLikedEvents(@PathVariable Long studentId) {
+    public ResponseEntity<List<LikedEventDTO>> getLikedEvents(@PathVariable Long studentId) {
         return ResponseEntity.ok(likedEventService.getLikedEventsByStudentId(studentId));
     }
 
