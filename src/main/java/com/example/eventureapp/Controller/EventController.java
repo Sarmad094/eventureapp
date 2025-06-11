@@ -5,6 +5,7 @@ import com.example.eventureapp.Mapper.EventMapper;
 import com.example.eventureapp.Model.Event;
 import com.example.eventureapp.Service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin("http://http://localhost:3000")
+@CrossOrigin("http://localhost:3000")  // Fixed: removed duplicate "http://"
 @RequestMapping("/api/events")
 public class EventController {
 
@@ -31,28 +32,45 @@ public class EventController {
     }
 
     @GetMapping("/{id}")
-    public EventDTO getEventById(@PathVariable Long id) {
+    public ResponseEntity<EventDTO> getEventById(@PathVariable Long id) {
         Optional<Event> event = eventService.findById(id);
-        return event.map(EventMapper::toDTO).orElse(null);
+        return event.map(e -> ResponseEntity.ok(EventMapper.toDTO(e)))
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Long createEvent(@RequestBody EventDTO eventDTO) {
-        Event event = EventMapper.toEntity(eventDTO);
-        return (long) eventService.save(event).getEventId();
+    public ResponseEntity<Long> createEvent(@RequestBody EventDTO eventDTO) {
+        try {
+            Event event = EventMapper.toEntity(eventDTO);
+            Event savedEvent = eventService.save(event);
+            return ResponseEntity.ok(savedEvent.getEventId());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PutMapping("/{id}")
-    public boolean updateEvent(@PathVariable Long id, @RequestBody EventDTO eventDTO) {
-        Event event = EventMapper.toEntity(eventDTO);
-        event.setEventId(id.intValue());
-        eventService.save(event);
-        return true;
+    public ResponseEntity<Boolean> updateEvent(@PathVariable Long id, @RequestBody EventDTO eventDTO) {
+        try {
+            Event event = EventMapper.toEntity(eventDTO);
+            event.setEventId(id);
+            eventService.save(event);
+            return ResponseEntity.ok(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(false);
+        }
     }
 
     @DeleteMapping("/{id}")
-    public boolean deleteEvent(@PathVariable Long id) {
-        eventService.deleteById(id);
-        return true;
+    public ResponseEntity<Boolean> deleteEvent(@PathVariable Long id) {
+        try {
+            eventService.deleteById(id);
+            return ResponseEntity.ok(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(false);
+        }
     }
 }
