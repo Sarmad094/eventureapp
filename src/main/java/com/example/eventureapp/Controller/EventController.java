@@ -1,59 +1,57 @@
 package com.example.eventureapp.Controller;
 
+import com.example.eventureapp.DTO.EventDTO;
+import com.example.eventureapp.Mapper.EventMapper;
 import com.example.eventureapp.Model.Event;
 import com.example.eventureapp.Service.EventService;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/events")
 public class EventController {
 
-    private final EventService service;
+    private final EventService eventService;
 
-    public EventController(EventService service) {
-        this.service = service;
+    @Autowired
+    public EventController(EventService eventService) {
+        this.eventService = eventService;
     }
 
     @GetMapping
-    public List<Event> getAll() {
-        return service.findAll();
+    public List<EventDTO> getAllEvents() {
+        return eventService.findAll().stream()
+                .map(EventMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Event> getById(@PathVariable Long id) {
-        return service.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public EventDTO getEventById(@PathVariable Long id) {
+        Optional<Event> event = eventService.findById(id);
+        return event.map(EventMapper::toDTO).orElse(null);
     }
 
     @PostMapping
-    public Event create(@RequestBody Event event) {
-        return service.save(event);
+    public Long createEvent(@RequestBody EventDTO eventDTO) {
+        Event event = EventMapper.toEntity(eventDTO);
+        return (long) eventService.save(event).getEventId();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Event> update(@PathVariable Long id,
-                                        @RequestBody Event updated) {
-        return service.findById(id)
-                .map(existing -> {
-                    existing.setTitle(updated.getTitle());
-                    existing.setStartDate(updated.getStartDate());
-                    existing.setEndDate(updated.getEndDate());
-                    // Add any other fields you want to update
-                    return ResponseEntity.ok(service.save(existing));
-                })
-                .orElse(ResponseEntity.notFound().build());
+    public boolean updateEvent(@PathVariable Long id, @RequestBody EventDTO eventDTO) {
+        Event event = EventMapper.toEntity(eventDTO);
+        event.setEventId(id.intValue());
+        eventService.save(event);
+        return true;
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        if (service.findById(id).isPresent()) {
-            service.deleteById(id);
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+    public boolean deleteEvent(@PathVariable Long id) {
+        eventService.deleteById(id);
+        return true;
     }
 }

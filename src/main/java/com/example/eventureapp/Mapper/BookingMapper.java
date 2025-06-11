@@ -16,7 +16,6 @@ public class BookingMapper {
         BookingDTO dto = new BookingDTO();
         dto.setBookId(Long.valueOf(booking.getBookId()));
 
-        // Convert String to LocalDate
         if (booking.getBookDate() != null && !booking.getBookDate().isEmpty()) {
             dto.setBookDate(LocalDate.parse(booking.getBookDate(), DATE_FORMATTER));
         }
@@ -32,7 +31,6 @@ public class BookingMapper {
         Booking booking = new Booking();
         booking.setBookId(dto.getBookId() != null ? dto.getBookId().intValue() : 0);
 
-        // Convert LocalDate to String
         if (dto.getBookDate() != null) {
             booking.setBookDate(dto.getBookDate().format(DATE_FORMATTER));
         }
