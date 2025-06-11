@@ -1,6 +1,9 @@
+
+
 package com.example.eventureapp.Controller;
 
 import com.example.eventureapp.Model.Payment;
+import com.example.eventureapp.DTO.PaymentDTO;
 import com.example.eventureapp.Service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/payments")
-@CrossOrigin(origins = "*") // Juster hvis du har frontend på en bestemt URL
+@CrossOrigin(origins = "*")
 public class PaymentController {
 
     private final PaymentService paymentService;
@@ -22,30 +25,30 @@ public class PaymentController {
     }
 
     @GetMapping
-    public List<Payment> getAllPayments() {
-        return paymentService.getAllPayments();
+    public List<PaymentDTO> getAllPayments() {
+        return paymentService.getAllPaymentsDTO(); // ENDRING: Bruker DTO metode
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Payment> getPaymentById(@PathVariable Long id) {
-        return paymentService.getPaymentById(id)
+    public ResponseEntity<PaymentDTO> getPaymentById(@PathVariable Long id) {
+        return paymentService.getPaymentByIdDTO(id) // ENDRING: Bruker DTO metode
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Payment> createPayment(@RequestBody Payment payment) {
+    public ResponseEntity<PaymentDTO> createPayment(@RequestBody Payment payment) {
         try {
-            return ResponseEntity.ok(paymentService.createPayment(payment));
+            return ResponseEntity.ok(paymentService.createPaymentDTO(payment)); // ENDRING: Bruker DTO metode
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(null);
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Payment> updatePayment(@PathVariable Long id, @RequestBody Payment payment) {
+    public ResponseEntity<PaymentDTO> updatePayment(@PathVariable Long id, @RequestBody Payment payment) {
         try {
-            return ResponseEntity.ok(paymentService.updatePayment(id, payment));
+            return ResponseEntity.ok(paymentService.updatePaymentDTO(id, payment)); // ENDRING: Bruker DTO metode
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
         }
@@ -54,7 +57,7 @@ public class PaymentController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePayment(@PathVariable Long id) {
         try {
-            paymentService.deletePayment(id);
+            paymentService.deletePayment(id); // UENDRET: Ingen DTO nødvendig for delete
             return ResponseEntity.noContent().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
@@ -62,7 +65,7 @@ public class PaymentController {
     }
 
     @GetMapping("/book/{bookId}")
-    public Optional<Payment> getPaymentsByBookId(@PathVariable int bookId) {
-        return paymentService.getPaymentsByBookId(bookId);
+    public Optional<PaymentDTO> getPaymentsByBookId(@PathVariable int bookId) {
+        return paymentService.getPaymentsByBookIdDTO(bookId); // ENDRING: Bruker DTO metode
     }
 }
