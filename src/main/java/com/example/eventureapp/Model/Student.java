@@ -7,7 +7,6 @@ import java.util.List;
 public class Student {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "studentid")
     private Long studentId;
 

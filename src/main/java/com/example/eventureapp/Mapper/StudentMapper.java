@@ -1,6 +1,5 @@
 package com.example.eventureapp.Mapper;
 
-// StudentMapper.java
 import com.example.eventureapp.DTO.StudentDTO;
 import com.example.eventureapp.Model.Student;
 
@@ -14,7 +13,7 @@ public class StudentMapper {
         dto.setPhonenumber(student.getPhonenumber());
         dto.setUniversity(student.getUniversity());
         dto.setS_field(student.getField());
-        // dto.setPassword(null); // valgfritt
+        dto.setPassword(student.getPassword());
         return dto;
     }
 

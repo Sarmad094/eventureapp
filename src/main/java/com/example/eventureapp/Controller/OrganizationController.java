@@ -1,4 +1,3 @@
-
 package com.example.eventureapp.Controller;
 
 import com.example.eventureapp.Model.Organization;
@@ -24,20 +23,29 @@ public class OrganizationController {
 
     @GetMapping
     public List<OrganizationDTO> getAllOrganizations() {
-        return organizationService.getAllOrganizationsDTO(); // ENDRING: Bruker DTO metode
+        return organizationService.getAllOrganizationsDTO();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<OrganizationDTO> getOrganizationById(@PathVariable Long id) {
-        return organizationService.getOrganizationByIdDTO(id) // ENDRING: Bruker DTO metode
+        return organizationService.getOrganizationByIdDTO(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
-    public ResponseEntity<OrganizationDTO> createOrganization(@RequestBody Organization organization) {
+    // ✅ OPPDATERT: Tar imot DTO og konverterer til Organization
+    @PostMapping("/register")
+    public ResponseEntity<OrganizationDTO> registerOrganization(@RequestBody OrganizationDTO dto) {
         try {
-            return ResponseEntity.ok(organizationService.createOrganizationDTO(organization)); // ENDRING: Bruker DTO metode
+            Organization org = new Organization();
+            org.setOrgId(dto.getOrgId());
+            org.setOrgName(dto.getOrgName());
+            org.setEmail(dto.getEmail());
+            org.setOField(dto.getOField());
+            // Passord bør håndteres her om det legges til
+
+            OrganizationDTO created = organizationService.createOrganizationDTO(org);
+            return ResponseEntity.ok(created);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(null);
         }
@@ -46,7 +54,7 @@ public class OrganizationController {
     @PutMapping("/{id}")
     public ResponseEntity<OrganizationDTO> updateOrganization(@PathVariable Long id, @RequestBody Organization organization) {
         try {
-            return ResponseEntity.ok(organizationService.updateOrganizationDTO(id, organization)); // ENDRING: Bruker DTO metode
+            return ResponseEntity.ok(organizationService.updateOrganizationDTO(id, organization));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
         }
@@ -55,7 +63,7 @@ public class OrganizationController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOrganization(@PathVariable Long id) {
         try {
-            organizationService.deleteOrganization(id); // UENDRET: Ingen DTO nødvendig for delete
+            organizationService.deleteOrganization(id);
             return ResponseEntity.noContent().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
