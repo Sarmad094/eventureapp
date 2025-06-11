@@ -1,6 +1,7 @@
+// StudentController.java
 package com.example.eventureapp.Controller;
 
-import com.example.eventureapp.Model.Student;
+import com.example.eventureapp.DTO.StudentDTO;
 import com.example.eventureapp.Service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/students")
-@CrossOrigin(origins = "*") // Juster hvis du har frontend på en bestemt URL
+@CrossOrigin(origins = "*")
 public class StudentController {
 
     private final StudentService studentService;
@@ -21,30 +22,30 @@ public class StudentController {
     }
 
     @GetMapping
-    public List<Student> getAllStudents() {
+    public List<StudentDTO> getAllStudents() {
         return studentService.getAllStudents();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
+    public ResponseEntity<StudentDTO> getStudentById(@PathVariable Long id) {
         return studentService.getStudentById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Student> createStudent(@RequestBody Student student) {
+    public ResponseEntity<StudentDTO> createStudent(@RequestBody StudentDTO dto) {
         try {
-            return ResponseEntity.ok(studentService.createStudent(student));
+            return ResponseEntity.ok(studentService.createStudent(dto));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(null);
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Student> updateStudent(@PathVariable Long id, @RequestBody Student student) {
+    public ResponseEntity<StudentDTO> updateStudent(@PathVariable Long id, @RequestBody StudentDTO dto) {
         try {
-            return ResponseEntity.ok(studentService.updateStudent(id, student));
+            return ResponseEntity.ok(studentService.updateStudent(id, dto));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
         }

@@ -1,8 +1,7 @@
 package com.example.eventureapp.DTO;
 
-import lombok.Data;
 
-@Data
+
 public class LikedEventDTO {
     private Long studentId;
     private Long eventId;
@@ -13,5 +12,20 @@ public class LikedEventDTO {
         this.studentId = studentId;
         this.eventId = eventId;
     }
-}
 
+    public Long getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(Long studentId) {
+        this.studentId = studentId;
+    }
+
+    public Long getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(Long eventId) {
+        this.eventId = eventId;
+    }
+}
