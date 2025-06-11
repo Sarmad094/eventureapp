@@ -1,38 +1,37 @@
 
-
 package com.example.eventureapp.Service;
 
 import com.example.eventureapp.Model.Payment;
 import com.example.eventureapp.DTO.PaymentDTO;
+import com.example.eventureapp.Mapper.PaymentMapper;
 import com.example.eventureapp.Repository.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class PaymentService {
 
     private final PaymentRepository paymentRepository;
+    private final PaymentMapper paymentMapper;
 
     @Autowired
-    public PaymentService(PaymentRepository paymentRepository) {
+    public PaymentService(PaymentRepository paymentRepository, PaymentMapper paymentMapper) {
         this.paymentRepository = paymentRepository;
+        this.paymentMapper = paymentMapper;
     }
 
-    // DTO METODER - Disse returnerer DTOs (ingen sykliske referanser)
+    // DTO METODER - Bruker mapper for konvertering
     public List<PaymentDTO> getAllPaymentsDTO() {
         List<Payment> payments = paymentRepository.findAll();
-        return payments.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+        return paymentMapper.toDTOList(payments);
     }
 
     public Optional<PaymentDTO> getPaymentByIdDTO(Long paymentId) {
         Optional<Payment> payment = paymentRepository.findById(paymentId);
-        return payment.map(this::convertToDTO);
+        return payment.map(paymentMapper::toDTO);
     }
 
     public PaymentDTO createPaymentDTO(Payment payment) {
@@ -43,7 +42,7 @@ public class PaymentService {
             throw new IllegalArgumentException("BookID is required");
         }
         Payment savedPayment = paymentRepository.save(payment);
-        return convertToDTO(savedPayment);
+        return paymentMapper.toDTO(savedPayment);
     }
 
     public PaymentDTO updatePaymentDTO(Long paymentId, Payment payment) {
@@ -55,7 +54,7 @@ public class PaymentService {
             p.setPaymentDate(payment.getPaymentDate());
             p.setCardName(payment.getCardName());
             Payment savedPayment = paymentRepository.save(p);
-            return convertToDTO(savedPayment);
+            return paymentMapper.toDTO(savedPayment);
         } else {
             throw new IllegalArgumentException("Payment not found with id: " + paymentId);
         }
@@ -63,10 +62,10 @@ public class PaymentService {
 
     public Optional<PaymentDTO> getPaymentsByBookIdDTO(int bookId) {
         Optional<Payment> payment = paymentRepository.findByBookingBookId(bookId);
-        return payment.map(this::convertToDTO);
+        return payment.map(paymentMapper::toDTO);
     }
 
-    // ORIGINALE METODER - Behold disse hvis andre deler av koden bruker dem
+    // ORIGINALE METODER - Uendret for andre som bruker dem
     public List<Payment> getAllPayments() {
         return paymentRepository.findAll();
     }
@@ -109,26 +108,5 @@ public class PaymentService {
 
     public Optional<Payment> getPaymentsByBookId(int bookId) {
         return paymentRepository.findByBookingBookId(bookId);
-    }
-
-    // PRIVATE HELPER METODE - Konverterer Entity til DTO
-    private PaymentDTO convertToDTO(Payment payment) {
-        if (payment == null) {
-            return null;
-        }
-
-        PaymentDTO dto = new PaymentDTO(
-                payment.getPaymentId(),
-                payment.getAmount(),
-                payment.getPaymentDate(),
-                payment.getCardName()
-        );
-
-        // Legg til booking ID (bryter syklisk referanse)
-        if (payment.getBooking() != null) {
-            dto.setBookId(payment.getBooking().getBookId());
-        }
-
-        return dto;
     }
 }

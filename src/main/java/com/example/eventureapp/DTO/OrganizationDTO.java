@@ -1,5 +1,3 @@
-// OrganizationDTO.java
-// Lag denne filen i: src/main/java/com/example/eventureapp/DTO/OrganizationDTO.java
 
 package com.example.eventureapp.DTO;
 

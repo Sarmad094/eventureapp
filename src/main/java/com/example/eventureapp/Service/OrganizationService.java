@@ -3,35 +3,35 @@ package com.example.eventureapp.Service;
 
 import com.example.eventureapp.Model.Organization;
 import com.example.eventureapp.DTO.OrganizationDTO;
+import com.example.eventureapp.Mapper.OrganizationMapper;
 import com.example.eventureapp.Repository.OrganizationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class OrganizationService {
 
     private final OrganizationRepository organizationRepository;
+    private final OrganizationMapper organizationMapper;
 
     @Autowired
-    public OrganizationService(OrganizationRepository organizationRepository) {
+    public OrganizationService(OrganizationRepository organizationRepository, OrganizationMapper organizationMapper) {
         this.organizationRepository = organizationRepository;
+        this.organizationMapper = organizationMapper;
     }
 
-
+    // DTO METODER - Bruker mapper for konvertering
     public List<OrganizationDTO> getAllOrganizationsDTO() {
         List<Organization> organizations = organizationRepository.findAll();
-        return organizations.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+        return organizationMapper.toDTOList(organizations);
     }
 
     public Optional<OrganizationDTO> getOrganizationByIdDTO(Long orgId) {
         Optional<Organization> organization = organizationRepository.findById(orgId);
-        return organization.map(this::convertToDTO);
+        return organization.map(organizationMapper::toDTO);
     }
 
     public OrganizationDTO createOrganizationDTO(Organization organization) {
@@ -39,7 +39,7 @@ public class OrganizationService {
             throw new IllegalArgumentException("Organization with this email already exists");
         }
         Organization savedOrg = organizationRepository.save(organization);
-        return convertToDTO(savedOrg);
+        return organizationMapper.toDTO(savedOrg);
     }
 
     public OrganizationDTO updateOrganizationDTO(Long orgId, Organization organization) {
@@ -51,12 +51,13 @@ public class OrganizationService {
             org.setPassword(organization.getPassword());
             org.setOField(organization.getOField());
             Organization savedOrg = organizationRepository.save(org);
-            return convertToDTO(savedOrg);
+            return organizationMapper.toDTO(savedOrg);
         } else {
             throw new IllegalArgumentException("Organization not found with id: " + orgId);
         }
     }
 
+    // ORIGINALE METODER - Uendret for andre som bruker dem
     public List<Organization> getAllOrganizations() {
         return organizationRepository.findAll();
     }
@@ -92,20 +93,5 @@ public class OrganizationService {
         } else {
             throw new IllegalArgumentException("Organization not found with id: " + orgId);
         }
-    }
-
-
-    private OrganizationDTO convertToDTO(Organization organization) {
-        if (organization == null) {
-            return null;
-        }
-
-        return new OrganizationDTO(
-                organization.getOrgId(),
-                organization.getOrgName(),
-                organization.getEmail(),
-                organization.getOField()
-        );
-
     }
 }

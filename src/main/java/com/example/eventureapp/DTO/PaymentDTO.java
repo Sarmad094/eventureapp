@@ -1,5 +1,4 @@
-// PaymentDTO.java
-// Lag denne filen i: src/main/java/com/example/eventureapp/DTO/PaymentDTO.java
+
 
 package com.example.eventureapp.DTO;
 

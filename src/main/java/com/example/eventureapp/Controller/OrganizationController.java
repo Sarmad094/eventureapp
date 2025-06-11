@@ -1,5 +1,3 @@
-// Erstatt din OrganizationController.java med denne
-// src/main/java/com/example/eventureapp/Controller/OrganizationController.java
 
 package com.example.eventureapp.Controller;
 
