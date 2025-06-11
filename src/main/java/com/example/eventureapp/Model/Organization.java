@@ -1,16 +1,17 @@
 package com.example.eventureapp.Model;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
+
 
 @Entity
 @Table(name = "organization")
 public class Organization {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "org_id")
-    private Long orgId;
+    private Long orgId; // ✅ FJERNET @GeneratedValue - nå manuell
 
     @Column(nullable = false)
     private String orgName;
@@ -22,6 +23,7 @@ public class Organization {
     private String password;
 
     @Column(name = "o_field")
+    @JsonProperty("oField")
     private String oField;
 
     // One-to-Many relasjon til Event
@@ -31,7 +33,8 @@ public class Organization {
     // Constructors
     public Organization() {}
 
-    public Organization(String orgName, String email, String password, String oField) {
+    public Organization(Long orgId, String orgName, String email, String password, String oField) {
+        this.orgId = orgId;
         this.orgName = orgName;
         this.email = email;
         this.password = password;

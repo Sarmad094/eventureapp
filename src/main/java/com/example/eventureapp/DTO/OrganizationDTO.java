@@ -1,19 +1,23 @@
-
 package com.example.eventureapp.DTO;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class OrganizationDTO {
     private Long orgId;
     private String orgName;
     private String email;
+    private String password; // ✅ LAGT TIL for login og registrering
+    @JsonProperty("oField")
     private String oField;
 
     // Constructors
     public OrganizationDTO() {}
 
-    public OrganizationDTO(Long orgId, String orgName, String email, String oField) {
+    public OrganizationDTO(Long orgId, String orgName, String email, String password, String oField) {
         this.orgId = orgId;
         this.orgName = orgName;
         this.email = email;
+        this.password = password;
         this.oField = oField;
     }
 
@@ -40,6 +44,14 @@ public class OrganizationDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getOField() {

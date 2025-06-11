@@ -1,4 +1,3 @@
-
 package com.example.eventureapp.Service;
 
 import com.example.eventureapp.Model.Organization;
@@ -35,11 +34,30 @@ public class OrganizationService {
     }
 
     public OrganizationDTO createOrganizationDTO(Organization organization) {
+        // ✅ FIKSET: Sjekk både email og ID
         if (organizationRepository.existsByEmail(organization.getEmail())) {
             throw new IllegalArgumentException("Organization with this email already exists");
         }
+        if (organizationRepository.existsById(organization.getOrgId())) {
+            throw new IllegalArgumentException("Organization with this ID already exists");
+        }
+
         Organization savedOrg = organizationRepository.save(organization);
         return organizationMapper.toDTO(savedOrg);
+    }
+
+    // ✅ NYTT: Autentisering for login
+    public OrganizationDTO authenticateOrganization(String email, String password) {
+        Optional<Organization> orgOptional = organizationRepository.findByEmail(email);
+
+        if (orgOptional.isPresent()) {
+            Organization org = orgOptional.get();
+            // Enkel passord-sjekk (i produksjon bør passord hashe)
+            if (org.getPassword().equals(password)) {
+                return organizationMapper.toDTO(org);
+            }
+        }
+        return null; // Ugyldig innlogging
     }
 
     public OrganizationDTO updateOrganizationDTO(Long orgId, Organization organization) {
@@ -69,6 +87,9 @@ public class OrganizationService {
     public Organization createOrganization(Organization organization) {
         if (organizationRepository.existsByEmail(organization.getEmail())) {
             throw new IllegalArgumentException("Organization with this email already exists");
+        }
+        if (organizationRepository.existsById(organization.getOrgId())) {
+            throw new IllegalArgumentException("Organization with this ID already exists");
         }
         return organizationRepository.save(organization);
     }
