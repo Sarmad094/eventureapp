@@ -46,7 +46,7 @@ public class BookingController {
     @PostMapping
     public Long lagBooking(@RequestBody BookingDTO bookingDTO) {
         Event event = eventService.findById(bookingDTO.getEventId()).orElse(null);
-        Student student = studentService.getStudentById(bookingDTO.getStudentId()).orElse(null);
+        Student student = studentService.getStudentEntityById(bookingDTO.getStudentId()).orElse(null);
         Booking booking = BookingMapper.toEntity(bookingDTO, event, student);
         return Long.valueOf(bookingService.lagNyBooking(booking).getBookId());
     }
@@ -54,7 +54,7 @@ public class BookingController {
     @PutMapping("/{id}")
     public boolean oppdater(@PathVariable int id, @RequestBody BookingDTO bookingDTO) {
         Event event = eventService.findById(bookingDTO.getEventId()).orElse(null);
-        Student student = studentService.getStudentById(bookingDTO.getStudentId()).orElse(null);
+        Student student = studentService.getStudentEntityById(bookingDTO.getStudentId()).orElse(null);
         Booking booking = BookingMapper.toEntity(bookingDTO, event, student);
         booking.setBookId(id);
         return bookingService.oppdaterBooking(booking);

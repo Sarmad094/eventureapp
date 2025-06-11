@@ -32,6 +32,11 @@ public class StudentService {
         return studentRepository.findById(id).map(StudentMapper::toDTO);
     }
 
+    // Add this method to return Student entity directly
+    public Optional<Student> getStudentEntityById(Long id) {
+        return studentRepository.findById(id);
+    }
+
     public Optional<Student> getStudentByEmail(String email) {
         return studentRepository.findByEmail(email);
     }
