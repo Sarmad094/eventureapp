@@ -24,6 +24,7 @@ public class EventController {
         this.eventService = eventService;
     }
 
+
     @GetMapping
     public List<EventDTO> getAllEvents() {
         return eventService.findAll().stream()

@@ -1,18 +1,16 @@
 package com.example.eventureapp.DTO;
 
-import java.time.LocalDate;
-
 public class BookingDTO {
     private Long bookId;
-    private LocalDate bookDate;
+    private String bookDate;        // Endret fra LocalDate til String
     private Boolean paymentStatus;
-    private Long eventId;   // referanse til Event - bryter syklisk referanse
-    private Long studentId; // referanse til Student - bryter syklisk referanse
+    private Long eventId;
+    private Long studentId;
 
     // Constructors
     public BookingDTO() {}
 
-    public BookingDTO(Long bookId, LocalDate bookDate, Boolean paymentStatus, Long eventId, Long studentId) {
+    public BookingDTO(Long bookId, String bookDate, Boolean paymentStatus, Long eventId, Long studentId) {
         this.bookId = bookId;
         this.bookDate = bookDate;
         this.paymentStatus = paymentStatus;
@@ -21,43 +19,18 @@ public class BookingDTO {
     }
 
     // Getters and Setters
-    public Long getBookId() {
-        return bookId;
-    }
+    public Long getBookId() { return bookId; }
+    public void setBookId(Long bookId) { this.bookId = bookId; }
 
-    public void setBookId(Long bookId) {
-        this.bookId = bookId;
-    }
+    public String getBookDate() { return bookDate; }          // Endret return type
+    public void setBookDate(String bookDate) { this.bookDate = bookDate; }  // Endret parameter type
 
-    public LocalDate getBookDate() {
-        return bookDate;
-    }
+    public Boolean getPaymentStatus() { return paymentStatus; }
+    public void setPaymentStatus(Boolean paymentStatus) { this.paymentStatus = paymentStatus; }
 
-    public void setBookDate(LocalDate bookDate) {
-        this.bookDate = bookDate;
-    }
+    public Long getEventId() { return eventId; }
+    public void setEventId(Long eventId) { this.eventId = eventId; }
 
-    public Boolean getPaymentStatus() {
-        return paymentStatus;
-    }
-
-    public void setPaymentStatus(Boolean paymentStatus) {
-        this.paymentStatus = paymentStatus;
-    }
-
-    public Long getEventId() {
-        return eventId;
-    }
-
-    public void setEventId(Long eventId) {
-        this.eventId = eventId;
-    }
-
-    public Long getStudentId() {
-        return studentId;
-    }
-
-    public void setStudentId(Long studentId) {
-        this.studentId = studentId;
-    }
+    public Long getStudentId() { return studentId; }
+    public void setStudentId(Long studentId) { this.studentId = studentId; }
 }
