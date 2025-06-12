@@ -7,7 +7,6 @@ import com.example.eventureapp.Model.Student;
 import com.example.eventureapp.Model.Event;
 import com.example.eventureapp.Repository.LikedEventRepository;
 import com.example.eventureapp.Repository.StudentRepository;
-import com.example.eventureapp.Repository.EventRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,11 +18,11 @@ public class LikedEventService {
 
     private final LikedEventRepository likedEventRepository;
     private final StudentRepository studentRepository;
-    private final EventRepository eventRepository;
+    private final com.example.eventureapp.Repository.eventRepository eventRepository;
 
     public LikedEventService(LikedEventRepository likedEventRepository,
                              StudentRepository studentRepository,
-                             EventRepository eventRepository) {
+                             com.example.eventureapp.Repository.eventRepository eventRepository) {
         this.likedEventRepository = likedEventRepository;
         this.studentRepository = studentRepository;
         this.eventRepository = eventRepository;

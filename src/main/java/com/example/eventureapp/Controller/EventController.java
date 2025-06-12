@@ -31,7 +31,19 @@ public class EventController {
                 .map(EventMapper::toDTO)
                 .collect(Collectors.toList());
     }
-
+    @GetMapping("/{id}/remaining-slots")
+    public ResponseEntity<Integer> getRemainingSlots(@PathVariable Long id) {
+        try {
+            Optional<Event> event = eventService.findById(id);
+            if (event.isPresent()) {
+                int remainingSlots = eventService.calculateRemainingSlots(id);
+                return ResponseEntity.ok(remainingSlots);
+            }
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
     @GetMapping("/{id}")
     public ResponseEntity<EventDTO> getEventById(@PathVariable Long id) {
         Optional<Event> event = eventService.findById(id);

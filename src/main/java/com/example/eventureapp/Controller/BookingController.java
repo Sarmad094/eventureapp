@@ -9,6 +9,7 @@ import com.example.eventureapp.Service.BookingService;
 import com.example.eventureapp.Service.EventService;
 import com.example.eventureapp.Service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -46,11 +47,28 @@ public class BookingController {
     }
 
     @PostMapping
-    public Long lagBooking(@RequestBody BookingDTO bookingDTO) {
-        Event event = eventService.findById(bookingDTO.getEventId()).orElse(null);
-        Student student = studentService.getStudentEntityById(bookingDTO.getStudentId()).orElse(null);
-        Booking booking = BookingMapper.toEntity(bookingDTO, event, student);
-        return Long.valueOf(bookingService.lagNyBooking(booking).getBookId());
+    public ResponseEntity<?> lagBooking(@RequestBody BookingDTO bookingDTO) {
+        try {
+            Event event = eventService.findById(bookingDTO.getEventId()).orElse(null);
+            Student student = studentService.getStudentEntityById(bookingDTO.getStudentId()).orElse(null);
+
+            if (event == null || student == null) {
+                return ResponseEntity.badRequest().body("Event or Student not found");
+            }
+
+            // Sjekk om booking er mulig
+            if (!eventService.canBookEvent(bookingDTO.getEventId(), bookingDTO.getStudentId())) {
+                return ResponseEntity.badRequest().body("Cannot book: Event is full or already booked");
+            }
+
+            Booking booking = BookingMapper.toEntity(bookingDTO, event, student);
+            Long bookingId = Long.valueOf(bookingService.lagNyBooking(booking).getBookId());
+
+            return ResponseEntity.ok(bookingId);
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Booking failed: " + e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")
